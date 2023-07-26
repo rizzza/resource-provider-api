@@ -13,6 +13,7 @@ import (
 	"go.infratographer.com/x/echojwtx"
 	"go.infratographer.com/x/echox"
 	"go.infratographer.com/x/events"
+	"go.infratographer.com/x/otelx"
 	"go.infratographer.com/x/versionx"
 	"go.uber.org/zap"
 
@@ -62,6 +63,11 @@ func serve(ctx context.Context) error {
 	pub, err := events.NewPublisher(config.AppConfig.Events.Publisher)
 	if err != nil {
 		logger.Fatalw("failed to create publisher", "error", err)
+	}
+
+	err = otelx.InitTracer(config.AppConfig.Tracing, appName, logger)
+	if err != nil {
+		logger.Fatalw("failed to initialize tracer", "error", err)
 	}
 
 	db, err := crdbx.NewDB(config.AppConfig.CRDB, config.AppConfig.Tracing.Enabled)
