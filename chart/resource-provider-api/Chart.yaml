@@ -1,0 +1,18 @@
+apiVersion: v2
+name: resource-provider-api
+description: A Helm chart for deploying the infratographer resource provider API
+type: application
+version: 0.0.1
+appVersion: "0.0.1"
+kubeVersion: ">=1.24"
+
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 2.4.0
+  - name: reloader
+    condition: reloader.enabled
+    version: "v1.0.26"
+    repository: "https://stakater.github.io/stakater-charts"
