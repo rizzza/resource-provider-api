@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	entgo.io/contrib v0.4.5
-	entgo.io/ent v0.12.3
+	entgo.io/ent v0.12.4-0.20230503082810-f251400818ea
 	github.com/99designs/gqlgen v0.17.34
 	github.com/Yamashou/gqlgenc v0.14.0
 	github.com/brianvoe/gofakeit/v6 v6.23.0
@@ -19,12 +19,14 @@ require (
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.21.0
 	github.com/vektah/gqlparser/v2 v2.5.6
 	github.com/wundergraph/graphql-go-tools v1.63.2
+	go.infratographer.com/permissions-api v0.1.19
 	go.infratographer.com/x v0.3.4
 	go.uber.org/zap v1.24.0
 )
 
 require (
 	ariga.io/atlas v0.12.0 // indirect
+	filippo.io/edwards25519 v1.0.0 // indirect
 	github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 // indirect
 	github.com/MicahParks/keyfunc/v2 v2.1.0 // indirect
 	github.com/Microsoft/go-winio v0.6.1 // indirect
@@ -45,6 +47,7 @@ require (
 	github.com/docker/docker v24.0.2+incompatible // indirect
 	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
+	github.com/felixge/httpsnoop v1.0.3 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/garsue/watermillzap v1.2.0 // indirect
 	github.com/go-logr/logr v1.2.4 // indirect
@@ -75,7 +78,7 @@ require (
 	github.com/jackc/pgx/v4 v4.18.1 // indirect
 	github.com/jaevor/go-nanoid v1.3.0 // indirect
 	github.com/klauspost/compress v1.16.7 // indirect
-	github.com/kylelemons/godebug v1.1.0 // indirect
+	github.com/labstack/echo v3.3.10+incompatible // indirect
 	github.com/labstack/echo-contrib v0.15.0 // indirect
 	github.com/labstack/echo-jwt/v4 v4.2.0 // indirect
 	github.com/labstack/gommon v0.4.0 // indirect
@@ -121,6 +124,7 @@ require (
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/zclconf/go-cty v1.13.2 // indirect
 	go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho v0.42.0 // indirect
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.42.0 // indirect
 	go.opentelemetry.io/otel v1.16.0 // indirect
 	go.opentelemetry.io/otel/exporters/jaeger v1.16.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/internal/retry v1.16.0 // indirect
@@ -132,21 +136,25 @@ require (
 	go.opentelemetry.io/otel/sdk v1.16.0 // indirect
 	go.opentelemetry.io/otel/trace v1.16.0 // indirect
 	go.opentelemetry.io/proto/otlp v0.20.0 // indirect
+	go.step.sm/crypto v0.31.2 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/crypto v0.11.0 // indirect
 	golang.org/x/exp v0.0.0-20230713183714-613f0c0eb8a1 // indirect
 	golang.org/x/mod v0.12.0 // indirect
 	golang.org/x/net v0.12.0 // indirect
+	golang.org/x/oauth2 v0.10.0 // indirect
 	golang.org/x/sys v0.10.0 // indirect
 	golang.org/x/text v0.11.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	golang.org/x/tools v0.10.0 // indirect
+	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20230530153820-e85fd2cbaebc // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20230530153820-e85fd2cbaebc // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230530153820-e85fd2cbaebc // indirect
-	google.golang.org/grpc v1.55.0 // indirect
+	google.golang.org/grpc v1.56.1 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
+	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

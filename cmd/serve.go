@@ -5,10 +5,12 @@ import (
 
 	"entgo.io/ent/dialect"
 	entsql "entgo.io/ent/dialect/sql"
+	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/mattn/go-sqlite3" // sqlite3 driver
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"go.infratographer.com/permissions-api/pkg/permissions"
 	"go.infratographer.com/x/crdbx"
 	"go.infratographer.com/x/echojwtx"
 	"go.infratographer.com/x/echox"
@@ -46,6 +48,7 @@ func init() {
 	echox.MustViperFlags(viper.GetViper(), serveCmd.Flags(), defaultListenAddr)
 	echojwtx.MustViperFlags(viper.GetViper(), serveCmd.Flags())
 	events.MustViperFlagsForPublisher(viper.GetViper(), serveCmd.Flags(), appName)
+	permissions.MustViperFlags(viper.GetViper(), serveCmd.Flags())
 
 	// only available as a CLI arg because it shouldn't be something that could accidentially end up in a config file or env var
 	serveCmd.Flags().BoolVar(&serveDevMode, "dev", false, "dev mode: enables playground, disables all auth checks, sets CORS to allow all, pretty logging, etc.")
@@ -99,17 +102,16 @@ func serve(ctx context.Context) error {
 
 	eventhooks.EventHooks(client)
 
-	// jwt auth middleware
-	if !serveDevMode {
-		authconfig := config.AppConfig.AuthConfig
-		config.AppConfig.Auth.JWTConfig.Skipper = echox.SkipDefaultEndpoints
+	var middleware []echo.MiddlewareFunc
 
-		auth, err := echojwtx.NewAuth(ctx, authconfig)
+	// jwt auth middleware
+	if viper.GetBool("oidc.enabled") {
+		auth, err := echojwtx.NewAuth(ctx, config.AppConfig.AuthConfig)
 		if err != nil {
 			logger.Fatal("failed to initialize jwt authentication", zap.Error(err))
 		}
 
-		config.AppConfig.Server = config.AppConfig.Server.WithMiddleware(auth.Middleware())
+		middleware = append(middleware, auth.Middleware())
 	}
 
 	srv, err := echox.NewServer(logger.Desugar(), config.AppConfig.Server, versionx.BuildDetails())
@@ -117,8 +119,19 @@ func serve(ctx context.Context) error {
 		logger.Error("failed to create server", zap.Error(err))
 	}
 
+	perms, err := permissions.New(config.AppConfig.Permissions,
+		permissions.WithLogger(logger),
+		permissions.WithDefaultChecker(permissions.DefaultAllowChecker),
+	)
+
+	middleware = append(middleware, perms.Middleware())
+
+	if err != nil {
+		logger.Fatal("failed to initialize permissions", zap.Error(err))
+	}
+
 	r := api.NewResolver(client, logger.Named("resolvers"))
-	handler := r.Handler(enablePlayground)
+	handler := r.Handler(enablePlayground, middleware...)
 
 	srv.AddHandler(handler)
 

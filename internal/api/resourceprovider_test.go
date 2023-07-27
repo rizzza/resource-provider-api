@@ -7,6 +7,7 @@ import (
 	"github.com/brianvoe/gofakeit/v6"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"go.infratographer.com/permissions-api/pkg/permissions"
 	"go.infratographer.com/x/gidx"
 
 	ent "go.infratographer.com/resource-provider-api/internal/ent/generated"
@@ -84,6 +85,9 @@ import (
 func TestQuery_resourceProvider(t *testing.T) {
 	ctx := context.Background()
 
+	// Permit request
+	ctx = context.WithValue(ctx, permissions.CheckerCtxKey, permissions.DefaultAllowChecker)
+
 	rp1 := (&ResourceProviderBuilder{}).MustNew(ctx)
 	rp2 := (&ResourceProviderBuilder{}).MustNew(ctx)
 
@@ -133,6 +137,10 @@ func TestQuery_resourceProvider(t *testing.T) {
 func Test_HappyPath(t *testing.T) {
 	client := graphTestClient()
 	ctx := context.Background()
+
+	// Permit request
+	ctx = context.WithValue(ctx, permissions.CheckerCtxKey, permissions.DefaultAllowChecker)
+
 	ownerID := gidx.MustNewID("testtnt")
 
 	t.Run("Create + List + Update + Delete", func(t *testing.T) {
