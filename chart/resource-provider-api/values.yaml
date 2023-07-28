@@ -1,6 +1,5 @@
 image:
-  #repository: ghcr.io/infratographer/resource-provider-api
-  repository: quay.io/tauerbeck/resource-provider-api
+  repository: ghcr.io/infratographer/resource-provider-api
   pullPolicy: IfNotPresent
   tag: "v0.0.2"
 
@@ -35,9 +34,9 @@ api:
   listenPort: 7610
   extraLabels: {}
   extraAnnotations: {}
-  extraEnvVars: 
-    - value: "postgresql://root@crdb-cockroachdb.crdb:26257/resource_provider_api?sslmode=disable"
-      name: RESOURCEPROVIDERAPI_CRDB_URI
+  extraEnvVars: []
+  # - value: "postgresql://root@crdb-cockroachdb.crdb:26257/resource_provider_api?sslmode=disable"
+  #   name: RESOURCEPROVIDERAPI_CRDB_URI
   resources: {}
   podSecurityContext: {}
   securityContext: {}
