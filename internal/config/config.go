@@ -13,7 +13,7 @@ import (
 
 // AppConfig stores all the config values for our application
 var AppConfig struct {
-	AuthConfig  echojwtx.AuthConfig
+	OIDC        echojwtx.AuthConfig
 	Events      EventsConfig
 	Auth        echojwtx.Auth
 	CRDB        crdbx.Config

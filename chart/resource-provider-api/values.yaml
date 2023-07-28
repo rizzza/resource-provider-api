@@ -2,7 +2,7 @@ image:
   #repository: ghcr.io/infratographer/resource-provider-api
   repository: quay.io/tauerbeck/resource-provider-api
   pullPolicy: IfNotPresent
-  tag: "v0.0.1"
+  tag: "v0.0.2"
 
 imagePullSecrets: []
 nameOverride: ""

@@ -106,7 +106,7 @@ func serve(ctx context.Context) error {
 
 	// jwt auth middleware
 	if viper.GetBool("oidc.enabled") {
-		auth, err := echojwtx.NewAuth(ctx, config.AppConfig.AuthConfig)
+		auth, err := echojwtx.NewAuth(ctx, config.AppConfig.OIDC)
 		if err != nil {
 			logger.Fatal("failed to initialize jwt authentication", zap.Error(err))
 		}
