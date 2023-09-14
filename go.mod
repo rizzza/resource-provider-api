@@ -21,7 +21,7 @@ require (
 	github.com/wundergraph/graphql-go-tools v1.63.2
 	go.infratographer.com/permissions-api v0.1.19
 	go.infratographer.com/x v0.3.4
-	go.uber.org/zap v1.24.0
+	go.uber.org/zap v1.26.0
 )
 
 require (
