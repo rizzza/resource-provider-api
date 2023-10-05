@@ -5,7 +5,7 @@ go 1.20
 require (
 	entgo.io/contrib v0.4.5
 	entgo.io/ent v0.12.4-0.20230503082810-f251400818ea
-	github.com/99designs/gqlgen v0.17.34
+	github.com/99designs/gqlgen v0.17.39
 	github.com/Yamashou/gqlgenc v0.14.0
 	github.com/brianvoe/gofakeit/v6 v6.23.0
 	github.com/hashicorp/go-multierror v1.1.1
@@ -17,7 +17,7 @@ require (
 	github.com/spf13/viper v1.16.0
 	github.com/stretchr/testify v1.8.4
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.21.0
-	github.com/vektah/gqlparser/v2 v2.5.6
+	github.com/vektah/gqlparser/v2 v2.5.10
 	github.com/wundergraph/graphql-go-tools v1.63.2
 	go.infratographer.com/permissions-api v0.1.19
 	go.infratographer.com/x v0.3.4
@@ -112,6 +112,7 @@ require (
 	github.com/prometheus/common v0.44.0 // indirect
 	github.com/prometheus/procfs v0.11.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
+	github.com/sosodev/duration v1.1.0 // indirect
 	github.com/spf13/afero v1.9.5 // indirect
 	github.com/spf13/cast v1.5.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
