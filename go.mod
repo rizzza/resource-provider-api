@@ -18,7 +18,7 @@ require (
 	github.com/stretchr/testify v1.8.4
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.21.0
 	github.com/vektah/gqlparser/v2 v2.5.6
-	github.com/wundergraph/graphql-go-tools v1.63.2
+	github.com/wundergraph/graphql-go-tools v1.67.0
 	go.infratographer.com/permissions-api v0.1.19
 	go.infratographer.com/x v0.3.4
 	go.uber.org/zap v1.24.0
