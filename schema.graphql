@@ -218,7 +218,6 @@ input UpdateResourceProviderInput {
 	clearDescription: Boolean
 }
 scalar _Any
-# a union of all types that use the @key directive
 union _Entity = ResourceOwner | ResourceProvider
 type _Service {
 	sdl: String

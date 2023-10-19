@@ -18,4 +18,5 @@ models:
 schema: ["internal/testclient/schema/schema.graphql"]
 query: ["internal/testclient/*.gql"]
 generate:
+  client: true
   clientInterfaceName: "TestClient"

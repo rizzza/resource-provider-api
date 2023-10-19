@@ -53,7 +53,6 @@ vendor: ## Vendors dependencies
 	@go mod tidy
 	@go mod download
 
-
 dev-nats: ## Initializes nats
 	@echo --- Initializing nats
 	@date --rfc-3339=seconds
@@ -68,3 +67,13 @@ go-run: ## Runs the app
 	@echo --- Running binary...
 	@date --rfc-3339=seconds
 	@go run main.go serve --dev
+
+background-run:  ## Runs in the app in the background
+	@echo --- Running binary in the background...
+	@date --rfc-3339=seconds
+	@go run main.go serve --pid-file=${PID_FILE} --oidc=false &
+
+kill-running: ## Kills the running binary from pid file
+	@echo --- Killing background binary...
+	@date --rfc-3339=seconds
+	@kill $$(cat ${PID_FILE})

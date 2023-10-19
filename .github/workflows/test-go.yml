@@ -1,13 +1,13 @@
 ---
 name: Test - Golang
-          
+
 # Run for all pushes to main and pull requests when Go or YAML files change
 on:
   push:
     branches:
       - main
   pull_request:
-          
+
 jobs:
   gotest:
     name: test
@@ -38,9 +38,7 @@ jobs:
       - name: Set up Go for ${{ matrix.ci-database }}
         uses: actions/setup-go@v4
         with:
-          #pinning to 1.20.5 until https://github.com/testcontainers/testcontainers-go/issues/1359 is resolved
-          #go-version-file: "go.mod"
-          go-version: "1.20.5"
+          go-version-file: "go.mod"
       - name: Install atlas for db migrations on ${{ matrix.ci-database }}
         run: go install ariga.io/atlas/cmd/atlas@latest
 

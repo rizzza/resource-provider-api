@@ -15,10 +15,20 @@
 *.out
 
 # Dependency directories (remove the comment below to include it)
-# vendor/
+vendor/
+
+# build artifacts
+bin/
+
+# devcontainer artifacts
+.devcontainer/nats/resolver.conf
+.devcontainer/nsc
 
 # Go workspace file
 go.work
 
 # Cover file
 coverage.txt
+
+# vscode
+.vscode

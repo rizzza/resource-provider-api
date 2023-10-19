@@ -21,6 +21,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"reflect"
 
 	"go.infratographer.com/resource-provider-api/internal/ent/generated/migrate"
 
@@ -128,11 +129,14 @@ func Open(driverName, dataSourceName string, options ...Option) (*Client, error)
 	}
 }
 
+// ErrTxStarted is returned when trying to start a new transaction from a transactional client.
+var ErrTxStarted = errors.New("generated: cannot start a transaction within a transaction")
+
 // Tx returns a new transactional client. The provided context
 // is used until the transaction is committed or rolled back.
 func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	if _, ok := c.driver.(*txDriver); ok {
-		return nil, errors.New("generated: cannot start a transaction within a transaction")
+		return nil, ErrTxStarted
 	}
 	tx, err := newTx(ctx, c.driver)
 	if err != nil {
@@ -241,6 +245,21 @@ func (c *ResourceProviderClient) Create() *ResourceProviderCreate {
 
 // CreateBulk returns a builder for creating a bulk of ResourceProvider entities.
 func (c *ResourceProviderClient) CreateBulk(builders ...*ResourceProviderCreate) *ResourceProviderCreateBulk {
+	return &ResourceProviderCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ResourceProviderClient) MapCreateBulk(slice any, setFunc func(*ResourceProviderCreate, int)) *ResourceProviderCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ResourceProviderCreateBulk{err: fmt.Errorf("calling to ResourceProviderClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ResourceProviderCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &ResourceProviderCreateBulk{config: c.config, builders: builders}
 }
 

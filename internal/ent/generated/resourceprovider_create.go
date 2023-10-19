@@ -232,11 +232,15 @@ func (rpc *ResourceProviderCreate) createSpec() (*ResourceProvider, *sqlgraph.Cr
 // ResourceProviderCreateBulk is the builder for creating many ResourceProvider entities in bulk.
 type ResourceProviderCreateBulk struct {
 	config
+	err      error
 	builders []*ResourceProviderCreate
 }
 
 // Save creates the ResourceProvider entities in the database.
 func (rpcb *ResourceProviderCreateBulk) Save(ctx context.Context) ([]*ResourceProvider, error) {
+	if rpcb.err != nil {
+		return nil, rpcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(rpcb.builders))
 	nodes := make([]*ResourceProvider, len(rpcb.builders))
 	mutators := make([]Mutator, len(rpcb.builders))
