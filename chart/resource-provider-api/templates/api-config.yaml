@@ -5,8 +5,15 @@ metadata:
   labels:
     {{- include "common.labels.standard" . | nindent 4 }}
 data:
-  RESOURCEPROVIDERAPI_EVENTS_PUBLISHER_PREFIX: "{{ .Values.api.events.topicPrefix }}"
-  RESOURCEPROVIDERAPI_EVENTS_PUBLISHER_URL: "{{ .Values.api.events.connectionURL }}"
+  RESOURCEPROVIDERAPI_EVENTS_NATS_URL: "{{ .Values.api.events.nats.url }}"
+  RESOURCEPROVIDERAPI_EVENTS_NATS_PUBLISHPREFIX: "{{ .Values.api.events.nats.publishPrefix }}"
+  RESOURCEPROVIDERAPI_EVENTS_NATS_QUEUEGROUP: "{{ .Values.api.events.nats.queueGroup }}"
+  RESOURCEPROVIDERAPI_EVENTS_NATS_SOURCE: "{{ .Values.api.events.nats.source }}"
+  RESOURCEPROVIDERAPI_EVENTS_NATS_CONNECTTIMEOUT: "{{ .Values.api.events.nats.connectTimeout }}"
+  RESOURCEPROVIDERAPI_EVENTS_NATS_SHUTDOWNTIMEOUT: "{{ .Values.api.events.nats.shutdownTimeout }}"
+{{- if .Values.api.events.nats.credsSecretName }}
+  RESOURCEPROVIDERAPI_EVENTS_NATS_CREDSFILE: "{{ .Values.api.events.nats.credsFile }}"
+{{- end }}
   RESOURCEPROVIDERAPI_OIDC_ENABLED: "{{ .Values.api.oidc.enabled }}"
   RESOURCEPROVIDERAPI_OIDC_AUDIENCE: "{{ .Values.api.oidc.audience }}"
   RESOURCEPROVIDERAPI_OIDC_ISSUER: "{{ .Values.api.oidc.issuer }}"

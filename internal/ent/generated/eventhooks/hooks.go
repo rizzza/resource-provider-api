@@ -22,6 +22,7 @@ import (
 	"time"
 
 	"entgo.io/ent"
+	"go.infratographer.com/permissions-api/pkg/permissions"
 	"go.infratographer.com/resource-provider-api/internal/ent/generated"
 	"go.infratographer.com/resource-provider-api/internal/ent/generated/hook"
 	"go.infratographer.com/x/events"
@@ -35,6 +36,7 @@ func ResourceProviderHooks() []ent.Hook {
 				return hook.ResourceProviderFunc(func(ctx context.Context, m *generated.ResourceProviderMutation) (ent.Value, error) {
 					var err error
 					additionalSubjects := []gidx.PrefixedID{}
+					relationships := []events.AuthRelationshipRelation{}
 
 					objID, ok := m.ID()
 					if !ok {
@@ -141,6 +143,11 @@ func ResourceProviderHooks() []ent.Hook {
 					}
 					additionalSubjects = append(additionalSubjects, owner_id)
 
+					relationships = append(relationships, events.AuthRelationshipRelation{
+						Relation:  "owner",
+						SubjectID: owner_id,
+					})
+
 					if ok {
 						cv_owner_id = fmt.Sprintf("%s", fmt.Sprint(owner_id))
 						pv_owner_id := ""
@@ -174,7 +181,13 @@ func ResourceProviderHooks() []ent.Hook {
 						return retValue, err
 					}
 
-					if err := m.EventsPublisher.PublishChange(ctx, "resource-provider", msg); err != nil {
+					if len(relationships) != 0 {
+						if err := permissions.CreateAuthRelationships(ctx, "resource-provider", objID, relationships...); err != nil {
+							return nil, fmt.Errorf("relationship request failed with error: %w", err)
+						}
+					}
+
+					if _, err := m.EventsPublisher.PublishChange(ctx, "resource-provider", msg); err != nil {
 						return nil, fmt.Errorf("failed to publish change: %w", err)
 					}
 
@@ -189,6 +202,7 @@ func ResourceProviderHooks() []ent.Hook {
 			func(next ent.Mutator) ent.Mutator {
 				return hook.ResourceProviderFunc(func(ctx context.Context, m *generated.ResourceProviderMutation) (ent.Value, error) {
 					additionalSubjects := []gidx.PrefixedID{}
+					relationships := []events.AuthRelationshipRelation{}
 
 					objID, ok := m.ID()
 					if !ok {
@@ -202,10 +216,21 @@ func ResourceProviderHooks() []ent.Hook {
 
 					additionalSubjects = append(additionalSubjects, dbObj.OwnerID)
 
+					relationships = append(relationships, events.AuthRelationshipRelation{
+						Relation:  "owner",
+						SubjectID: dbObj.OwnerID,
+					})
+
 					// we have all the info we need, now complete the mutation before we process the event
 					retValue, err := next.Mutate(ctx, m)
 					if err != nil {
 						return retValue, err
+					}
+
+					if len(relationships) != 0 {
+						if err := permissions.DeleteAuthRelationships(ctx, "resource-provider", objID, relationships...); err != nil {
+							return nil, fmt.Errorf("relationship request failed with error: %w", err)
+						}
 					}
 
 					msg := events.ChangeMessage{
@@ -215,7 +240,7 @@ func ResourceProviderHooks() []ent.Hook {
 						Timestamp:            time.Now().UTC(),
 					}
 
-					if err := m.EventsPublisher.PublishChange(ctx, "resource-provider", msg); err != nil {
+					if _, err := m.EventsPublisher.PublishChange(ctx, "resource-provider", msg); err != nil {
 						return nil, fmt.Errorf("failed to publish change: %w", err)
 					}
 

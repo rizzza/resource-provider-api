@@ -1,7 +1,7 @@
 image:
   repository: ghcr.io/infratographer/resource-provider-api
   pullPolicy: IfNotPresent
-  tag: "v0.0.2"
+  tag: "main-latest"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -31,7 +31,7 @@ ingress:
 
 api:
   replicas: 2
-  listenPort: 7610
+  listenPort: 17608
   extraLabels: {}
   extraAnnotations: {}
   extraEnvVars: []
@@ -41,15 +41,29 @@ api:
   podSecurityContext: {}
   securityContext: {}
   events:
-    connectionURL: "nats://nats.nats:4222"
-    auth:
-      secretName: ""
-      credsPath: "/nats/creds"
-    topicPrefix: "com.infratographer"
+    nats:
+      # url is the event server connection url
+      url: "nats://my-events-cluster.example.com:4222"
+      # publishPrefix is the subscribe event prefix
+      publishPrefix: "com.infratographer"
+      # queueGroup defines the events queue group
+      queueGroup: ""
+      # source defines the source of the events (defaults to application name)
+      source: ""
+      # connectTimeout is event connection timeout
+      connectTimeout: "10s"
+      # shutdownTimeout is the shutdown grace period
+      shutdownTimeout: "5s"
+      # tokenSecretName is the secret to load the auth token
+      tokenSecretName: ""
+      # credsSecretName is the secret to load the creds auth file from
+      credsSecretName: ""
+      # credsFile is the location to read the creds file from
+      credsFile: "/nats/creds"
   db:
     uriSecret: ""
     certSecret: ""
-  migrateOnInit: true 
+  migrateOnInit: true
 
   oidc:
     enabled: false

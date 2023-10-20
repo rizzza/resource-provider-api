@@ -6,8 +6,10 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"go.infratographer.com/permissions-api/pkg/permissions"
+	"go.infratographer.com/permissions-api/pkg/permissions/mockpermissions"
 	"go.infratographer.com/x/echojwtx"
 	"go.infratographer.com/x/testing/auth"
 )
@@ -15,6 +17,15 @@ import (
 func TestJWTEnabledResourceProviderGETWithAuthClient(t *testing.T) {
 	oauthCLI, issuer, oAuthClose := auth.OAuthTestClient("urn:test:resourceprovider", "")
 	defer oAuthClose()
+
+	ctx := context.Background()
+	perms := new(mockpermissions.MockPermissions)
+	perms.On("CreateAuthRelationships", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+
+	ctx = perms.ContextWithHandler(ctx)
+
+	// Permit request
+	ctx = context.WithValue(ctx, permissions.CheckerCtxKey, permissions.DefaultAllowChecker)
 
 	srv, err := newTestServer(
 		withAuthConfig(
@@ -32,7 +43,6 @@ func TestJWTEnabledResourceProviderGETWithAuthClient(t *testing.T) {
 
 	defer srv.Close()
 
-	ctx := context.Background()
 	lb1 := (&ResourceProviderBuilder{}).MustNew(ctx)
 
 	resp, err := graphTestClient(
@@ -49,6 +59,15 @@ func TestJWTENabledResourceProviderGETWithDefaultClient(t *testing.T) {
 	_, issuer, oAuthClose := auth.OAuthTestClient("urn:test:resourceprovider", "")
 	defer oAuthClose()
 
+	ctx := context.Background()
+	perms := new(mockpermissions.MockPermissions)
+	perms.On("CreateAuthRelationships", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+
+	ctx = perms.ContextWithHandler(ctx)
+
+	// Permit request
+	ctx = context.WithValue(ctx, permissions.CheckerCtxKey, permissions.DefaultAllowChecker)
+
 	srv, err := newTestServer(
 		withAuthConfig(
 			&echojwtx.AuthConfig{
@@ -65,7 +84,6 @@ func TestJWTENabledResourceProviderGETWithDefaultClient(t *testing.T) {
 
 	defer srv.Close()
 
-	ctx := context.Background()
 	rp1 := (&ResourceProviderBuilder{}).MustNew(ctx)
 
 	resp, err := graphTestClient(
