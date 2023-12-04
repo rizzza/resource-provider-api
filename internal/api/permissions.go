@@ -1,8 +1,8 @@
 package api
 
 const (
-	actionResourceProviderCreate = "resourceprovider_create"
-	actionResourceProviderUpdate = "resourceprovider_update"
-	actionResourceProviderDelete = "resourceprovider_delete"
-	actionResourceProviderGet    = "resourceprovider_get"
+	actionResourceProviderCreate = "resource_provider_create"
+	actionResourceProviderUpdate = "resource_provider_update"
+	actionResourceProviderDelete = "resource_provider_delete"
+	actionResourceProviderGet    = "resource_provider_get"
 )
